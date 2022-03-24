@@ -55,27 +55,25 @@ public class FXMLController {
 
     @FXML
     void handleSpellCheck(ActionEvent event) {
+    	long inizio = System.currentTimeMillis();
     	txtWrong.clear();
     	List<RichWord> listaRichWord = new LinkedList<RichWord>();
-    	model.loadDictionary(cmbLingue.getValue());
+    	model.loadDictionary(cmbLingue.getValue()); // Dal controller richiamo il modello chiedendo di caricare il dizionario in base alla parola 
+    												// che è stata selezionata
     	String daControllare = txtInserimento.getText().toLowerCase();
     	daControllare.replaceAll("[.,\\/#!$%\\^&\\*;:{}=\\-_`~()\\[\\]\"]", " ");
-    	String[] arrayParole = daControllare.split(" "); // Vado ad inserire dentro l'array tutte le parole che ottengo andando a slittare la stringa
-    													 // dagli spazi
+    	String[] arrayParole = daControllare.split(" "); // Vado ad inserire dentro l'array tutte le parole che ottengo andando a splittare la 
+    													 // stringa dagli spazi
     	List<String> parole = new LinkedList<String>();
     	
     	for(int i = 0; i < arrayParole.length; i++) {
-    		parole.add(arrayParole[i]);
+    		parole.add(arrayParole[i]); // Prendo le parole dell'array e le metto in una lista
     	}
     	
-    	for(int i = 0; i < parole.size(); i++) {
-    		System.out.println(parole.get(i));
-    	}
-    	
-    	listaRichWord = model.spellCheckText(parole);
+    	listaRichWord = model.spellCheckText(parole); // Passo al metodo spellCheckText del modello la lista di parole da controllare
     	int cntWrong = 0;
     	
-    	for(RichWord r : listaRichWord) {
+    	for(RichWord r : listaRichWord) { // Stampo le parole errate nell'apposita area
     		if(r.isCorretta() == false) {
     			txtWrong.appendText(r.getParola() + "\n");
     			cntWrong++;
@@ -83,6 +81,9 @@ public class FXMLController {
     	}
     	
     	lblRisultato.setText("The text contains " + cntWrong + " errors");
+    	long fine = System.currentTimeMillis();
+    	long diff = fine - inizio;
+    	lblTime.setText("Spell check completed in " + Long.toString(diff) + " milliseconds");
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -95,6 +96,7 @@ public class FXMLController {
         assert txtInserimento != null : "fx:id=\"txtInserimento\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtWrong != null : "fx:id=\"txtWrong\" was not injected: check your FXML file 'Scene.fxml'.";
 
+        // Carico la combobox
         cmbLingue.getItems().clear();
         cmbLingue.getItems().add("English");
         cmbLingue.getItems().add("Italian");
