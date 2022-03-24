@@ -58,6 +58,12 @@ public class FXMLController {
     	long inizio = System.currentTimeMillis();
     	txtWrong.clear();
     	List<RichWord> listaRichWord = new LinkedList<RichWord>();
+    	if(cmbLingue.getValue() == null) {
+    		txtWrong.setText("Errore: selezionare una lingua");
+    		return;
+    	}
+    		
+    		
     	model.loadDictionary(cmbLingue.getValue()); // Dal controller richiamo il modello chiedendo di caricare il dizionario in base alla parola 
     												// che è stata selezionata
     	String daControllare = txtInserimento.getText().toLowerCase();
